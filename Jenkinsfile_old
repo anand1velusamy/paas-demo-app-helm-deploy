@@ -1,0 +1,52 @@
+node ('my-release-jenkins-slave') {
+    // reference to maven
+    // ** NOTE: This 'maven-3.5.2' Maven tool must be configured in the Jenkins Global Configuration.   
+    def mvnHome = tool 'maven-3.5.2'
+
+    // holds reference to docker image
+    def dockerImage
+    // ip address of the docker private repository(artifactory)
+     
+    // artifactory repo url
+	def dockerRepoUrl = "docker.artifactory.a.intuit.com"
+    def dockerImageName = "hello-world-java"
+    def dockerImageTag = "${dockerRepoUrl}/${dockerImageName}:${env.BUILD_NUMBER}"
+    
+    stage('Clone Repo') { // for display purposes
+      // Get some code from a GitHub repository
+      //git 'https://github.intuit.com/kubernetes-paas/paas-demo-app'
+	  checkout scm
+      // Get the Maven tool.
+      // ** NOTE: This 'maven-3.5.2' Maven tool must be configured
+      // **       in the global configuration.           
+      mvnHome = tool 'maven-3.5.2'
+    }    
+  
+    stage('Build Project') {
+      // build project via maven
+      sh "'${mvnHome}/bin/mvn' -D maven.test.failure.ignore clean package"
+    }
+	
+	stage('Publish Tests Results'){
+      echo " Will be integrated with Testing platforms in Phase 2"
+    }
+		
+    stage('Build Docker Image') {
+      // build docker image
+      sh "mv ./target/hello*.jar ./data" 
+      
+      dockerImage = docker.build("hello-world-java")
+    }
+   
+    stage('Deploy Docker Image'){
+      
+      // deploy docker image to artifactory repo
+
+      echo "Docker Image Tag Name: ${dockerImageTag}"
+
+      //sh "docker login -u admin -p api key ${dockerRepoUrl}"
+	  //sh  docker login -u admin -p api key docker.artifactory.a.intuit.com
+      //sh "docker tag ${dockerImageName} ${dockerImageTag}"
+      //sh "docker push ${dockerImageTag}"
+    }
+}

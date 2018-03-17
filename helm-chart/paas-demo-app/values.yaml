@@ -1,0 +1,4 @@
+webapp: 
+  image: 490747939488.dkr.ecr.us-west-1.amazonaws.com/paas-demo-app:latest
+  port: 8080
+  replicas: 3
