@@ -3,34 +3,47 @@ node('jnlp') {
 
     stage('Clone Repo') {
       // Checkout SCM
+       steps {
+         echo "Clone Repo"
          checkout scm    
     }    
-  
+  }
     stage('Build Project') {
+     steps {
+       echo "Build Project via Maven"
       // build project via maven
        sh "mvn -D maven.test.failure.ignore clean package"
     }
-  
+  }
     stage('Publish Tests Results'){
+     steps {
       echo " Will be integrated with Testing platforms in Phase 2"
     }
-    
+    }
+
     stage('Build Docker Image') {
+    steps {
       // build docker image
+      echo "Build Docker Image"
       sh "mv ./target/hello*.jar ./data" 
       app = docker.build("paas-demo-app")
     }
-   
+   }
     stage('Push image') {
+    steps {
         /* Finally, we'll push the image to ECR on latest tag. */
+        echo "Push image to ECR"
         sh "eval \$(aws ecr get-login --no-include-email --region us-west-1 | sed 's|https://||')"       
         docker.withRegistry('https://490747939488.dkr.ecr.us-west-1.amazonaws.com/paas-demo-app:latest', 'ecr:us-west-1:ecr-credentials') {
             docker.image('paas-demo-app').push('latest')
     }
     }
+    }
 
     stage('Helm Push Stage') {
         /* Finally, we'll push the image to Kubernetes Cluster. */
+      steps {
+        echo "Helm Push Stage"
         sh "eval \$(aws ecr get-login --no-include-email --region us-west-1 | sed 's|https://||')"
         sh 'wget https://storage.googleapis.com/kubernetes-helm/helm-v2.7.2-linux-amd64.tar.gz'
         sh 'tar -zxvf  helm-v2.7.2-linux-amd64.tar.gz'
@@ -42,4 +55,5 @@ node('jnlp') {
         sh 'helm ls'
 } 
     
+ }   
     }
