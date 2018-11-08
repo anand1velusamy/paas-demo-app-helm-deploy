@@ -3,6 +3,7 @@ node {
 
     stage('Clone Repo') {
          sh 'git clone https://9826096011383718a035dd8376ba708eb92b92cb@github.com/anand1velusamy/paas-demo-app-helm-deploy'
+         sh 'export KUBECONFIG=./kubeconfig'
          sh 'kubectl get pods'
          sh 'kubectl config view'
          sh 'helm init'
