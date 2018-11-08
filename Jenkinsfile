@@ -1,9 +1,10 @@
-node('jnlp') {
+node {
    def app
 
     stage('Clone Repo') {
       // Checkout SCM
          checkout scm    
+         sh 'kubectl get pods'
     }    
   
     stage('Build Project') {
