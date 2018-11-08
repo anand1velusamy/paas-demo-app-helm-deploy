@@ -4,7 +4,6 @@ node {
     stage('Clone Repo') {   
          sh 'kubectl get pods'
          sh 'kubectl config view'
-         sh 'docker ps'
          sh 'helm init'
          sh 'helm ls'
          sh 'mkdir hello && cd hello && git clone https://9826096011383718a035dd8376ba708eb92b92cb@github.com/anand1velusamy/paas-demo-app-helm-deploy'
