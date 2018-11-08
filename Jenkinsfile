@@ -2,6 +2,8 @@ node {
    def app
 
     stage('Clone Repo') {
+         sh 'ls -ls ./'
+         sh 'pwd'
          checkout scm
          sh 'kubectl get pods'
     }    
