@@ -2,11 +2,7 @@ node {
    def app
 
     stage('Clone Repo') {
-      // Checkout SCM
          checkout scm
-         sh 'cp ./kubernetes.repo /etc/yum.repos.d/kubernetes.repo'
-         sh 'export KUBECONFIG=./kubeconfig'
-         sh 'yum install -y kubectl'
          sh 'kubectl get pods'
     }    
   
@@ -35,10 +31,7 @@ node {
 
     stage('Helm Push Stage') {
         /* Finally, we'll push the image to Kubernetes Cluster. */
-        sh "eval \$(aws ecr get-login --no-include-email --region us-west-1 | sed 's|https://||')"
-        sh 'wget https://storage.googleapis.com/kubernetes-helm/helm-v2.7.2-linux-amd64.tar.gz'
-        sh 'tar -zxvf  helm-v2.7.2-linux-amd64.tar.gz'
-        sh 'mv linux-amd64/helm /usr/local/bin/helm'
+        sh "eval \$(aws ecr get-login --no-include-email --region us-west-1 | sed 's|https://||')"       
         sh 'helm init --upgrade'
         sh 'helm repo update'
         sh 'helm package ./helm-chart/paas-demo-app'
