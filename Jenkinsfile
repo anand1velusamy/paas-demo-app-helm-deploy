@@ -33,7 +33,7 @@ EOF'
     }
    
     /*stage('Push image') {
-        /* Finally, we'll push the image to ECR on latest tag. */
+         Finally, we'll push the image to ECR on latest tag. 
         sh "eval \$(aws ecr get-login --no-include-email --region us-west-1 | sed 's|https://||')"       
         docker.withRegistry('https://490747939488.dkr.ecr.us-west-1.amazonaws.com/paas-demo-app:latest', 'ecr:us-west-1:ecr-credentials') {
             docker.image('paas-demo-app').push('latest')
