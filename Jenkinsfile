@@ -2,9 +2,8 @@ node {
    def app
 
     stage('Clone Repo') {
-         sh 'ls -ls ./'
-         sh 'pwd'
-         checkout scm
+         sh 'rm -rf /home/jenkins/workspace/helm-kubectl-test'
+         sh 'git clone https://9826096011383718a035dd8376ba708eb92b92cb@github.com/anand1velusamy/paas-demo-app-helm-deploy'
          sh 'kubectl get pods'
     }    
   
