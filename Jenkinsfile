@@ -2,7 +2,7 @@ node {
    def app
 
     stage('Clone Repo') {   
-         sh 'export KUBECONFIG=/home/jenkins/sa.kubeconfig && kubectl get pods'
+         sh 'kubectl get pods'
          sh 'kubectl config view'
          sh 'docker ps'
          sh 'helm init'
