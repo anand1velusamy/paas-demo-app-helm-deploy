@@ -3,7 +3,17 @@ node {
 
     stage('Clone Repo') {
       // Checkout SCM
-         checkout scm    
+         checkout scm
+         sh 'cat <<EOF > /etc/yum.repos.d/kubernetes.repo \
+[kubernetes] \
+name=Kubernetes \
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64 \
+enabled=1 \
+gpgcheck=1 \
+repo_gpgcheck=1 \
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg \
+EOF'
+         sh 'yum install -y kubectl'
          sh 'kubectl get pods'
     }    
   
@@ -22,13 +32,13 @@ node {
       app = docker.build("paas-demo-app")
     }
    
-    stage('Push image') {
+    /*stage('Push image') {
         /* Finally, we'll push the image to ECR on latest tag. */
         sh "eval \$(aws ecr get-login --no-include-email --region us-west-1 | sed 's|https://||')"       
         docker.withRegistry('https://490747939488.dkr.ecr.us-west-1.amazonaws.com/paas-demo-app:latest', 'ecr:us-west-1:ecr-credentials') {
             docker.image('paas-demo-app').push('latest')
     }
-    }
+    }*/
 
     stage('Helm Push Stage') {
         /* Finally, we'll push the image to Kubernetes Cluster. */
